@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">开源合集</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="menu_search">search</string>
+    <string name="menu_notifications">notifications</string>
+    <string name="menu_item_01">item_01</string>
+    <string name="menu_item_02">item_02</string>
+
+    <string name="github">github</string>
+</resources>
