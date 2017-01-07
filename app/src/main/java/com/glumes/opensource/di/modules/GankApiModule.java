@@ -15,6 +15,10 @@ import retrofit2.Retrofit;
 @Module
 public class GankApiModule {
 
+    public GankApiModule() {
+
+    }
+
     @Provides // 方法以 Provide 开头，增加代码的可读性
     @ActivityScope
     GankApiService proviceGankApiService(Retrofit retrofit) {

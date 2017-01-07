@@ -1,13 +1,9 @@
 package com.glumes.opensource;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.facebook.stetho.Stetho;
 import com.glumes.opensource.di.components.AppComponent;
-import com.glumes.opensource.di.components.DaggerAppComponent;
-import com.glumes.opensource.di.modules.HttpModule;
-import com.glumes.opensource.utils.FakeCrashLibrary;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;

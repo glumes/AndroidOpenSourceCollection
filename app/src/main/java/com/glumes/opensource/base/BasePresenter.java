@@ -58,7 +58,7 @@ public abstract class BasePresenter<T extends LoadView<List<BaseResult>>, M exte
         Timber.d("super method");
     }
 
-    @Override
+
     public void LoadData(int type, int page, int num) {
         mSubscription.add(mModel.getData(type, page, num)
                 .subscribeOn(Schedulers.io())

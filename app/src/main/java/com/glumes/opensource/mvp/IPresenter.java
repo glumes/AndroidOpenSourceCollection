@@ -10,5 +10,4 @@ public interface IPresenter<T> {
 
     void detachView();
 
-    void LoadData(int type,int page,int num);
 }

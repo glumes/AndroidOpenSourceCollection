@@ -16,6 +16,7 @@ public class BaseModel implements IModel<Observable<List<BaseResult>>> {
 
     @Override
     public Observable<List<BaseResult>> getData(int type, int page, int num) {
-        return NetworkApi.getInstance().getData(type,page,num);
+//        return NetworkApi.getInstance().getData(type,page,num);
+        return null ;
     }
 }

@@ -1,4 +1,4 @@
-package com.glumes.opensource.utils.exception;
+package com.glumes.opensource.utils;
 
 /**
  * Created by zhaoying on 16/11/8.

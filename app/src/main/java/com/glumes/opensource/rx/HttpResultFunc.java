@@ -1,7 +1,7 @@
 package com.glumes.opensource.rx;
 
 import com.glumes.opensource.net.entity.HttpResult;
-import com.glumes.opensource.utils.exception.DataErrorException;
+import com.glumes.opensource.utils.DataErrorException;
 
 import rx.functions.Func1;
 
