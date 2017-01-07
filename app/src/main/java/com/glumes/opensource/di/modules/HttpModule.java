@@ -2,8 +2,11 @@ package com.glumes.opensource.di.modules;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.glumes.opensource.net.api.GankApiService;
+import com.google.gson.Gson;
 
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -19,14 +22,15 @@ import timber.log.Timber;
  */
 
 @Module
-public class NetworkModule {
+public class HttpModule {
 
     private static final long TIME_OUT = 10;
     private static final String BASE_URL = "https://gank.io/api/";
 
 
-    @Provides // 方法以 Provide 开头，增加代码的可读性
-    GankApiService proviceGankApiService() {
+    @Provides
+    @Singleton
+    OkHttpClient provideOkHttpClient(){
 
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor(message -> Timber.d(message));
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -38,14 +42,24 @@ public class NetworkModule {
                 .addInterceptor(httpLoggingInterceptor)
                 .addNetworkInterceptor(new StethoInterceptor());
 
+        return builder.build();
+    }
+
+    @Provides
+    @Singleton
+    Retrofit provideRetrofit(OkHttpClient client,Gson gson){
         return  new Retrofit.Builder()
-                .client(builder.build())
-                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .addConverterFactory( GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(BASE_URL)
-                .build().create(GankApiService.class);
-
+                .build();
     }
 
 
+    @Provides
+    @Singleton
+    Gson proviceGson(){
+        return new Gson();
+    }
 }

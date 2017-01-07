@@ -1,4 +1,4 @@
-package com.glumes.opensource.ui.fragment.benefit;
+package com.glumes.opensource.ui.fragment;
 
 import com.glumes.opensource.base.BaseModel;
 import com.glumes.opensource.base.BasePresenter;

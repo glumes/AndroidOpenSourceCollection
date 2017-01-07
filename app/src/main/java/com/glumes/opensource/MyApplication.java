@@ -6,7 +6,7 @@ import android.util.Log;
 import com.facebook.stetho.Stetho;
 import com.glumes.opensource.di.components.AppComponent;
 import com.glumes.opensource.di.components.DaggerAppComponent;
-import com.glumes.opensource.di.modules.NetworkModule;
+import com.glumes.opensource.di.modules.HttpModule;
 import com.glumes.opensource.utils.FakeCrashLibrary;
 
 import io.realm.Realm;
@@ -34,15 +34,12 @@ public class MyApplication extends Application {
         initRealmConfig();
         initTimber();
         initStetho();
-        mAppComponent = DaggerAppComponent.builder().networkModule(new NetworkModule()).build();
 
     }
 
     private void initTimber() {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
-        } else {
-            Timber.plant(new CrashReportingTree());
         }
     }
 
@@ -53,28 +50,6 @@ public class MyApplication extends Application {
         Realm.setDefaultConfiguration(config);
     }
 
-
-    /**
-     * A tree which logs important information for crash reporting.
-     */
-    private static class CrashReportingTree extends Timber.Tree {
-        @Override
-        protected void log(int priority, String tag, String message, Throwable t) {
-            if (priority == Log.VERBOSE || priority == Log.DEBUG) {
-                return;
-            }
-
-            FakeCrashLibrary.log(priority, tag, message);
-
-            if (t != null) {
-                if (priority == Log.ERROR) {
-                    FakeCrashLibrary.logError(t);
-                } else if (priority == Log.WARN) {
-                    FakeCrashLibrary.logWarning(t);
-                }
-            }
-        }
-    }
 
     public void initStetho() {
         Stetho.initialize(Stetho.newInitializerBuilder(this)

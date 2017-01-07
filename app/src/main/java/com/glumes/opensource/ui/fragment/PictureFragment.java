@@ -1,4 +1,4 @@
-package com.glumes.opensource.ui.fragment.benefit;
+package com.glumes.opensource.ui.fragment;
 
 
 import android.os.Bundle;
@@ -12,8 +12,6 @@ import android.view.ViewGroup;
 
 import com.glumes.opensource.R;
 import com.glumes.opensource.base.BaseLoadFragment;
-import com.glumes.opensource.di.components.DaggerFragmentComponent;
-import com.glumes.opensource.di.modules.FragmentModule;
 import com.glumes.opensource.net.entity.BaseResult;
 
 import java.util.List;
@@ -53,8 +51,8 @@ public class PictureFragment extends BaseLoadFragment implements PictureContract
             Timber.d("type is %d", mType);
         }
 
-        DaggerFragmentComponent.builder().appComponent(getAppComponent())
-                .fragmentModule(new FragmentModule()).build().inject(this);
+//        DaggerFragmentComponent.builder().appComponent(getAppComponent())
+//                .fragmentModule(new FragmentModule()).build().inject(this);
 
     }
 
@@ -65,14 +63,14 @@ public class PictureFragment extends BaseLoadFragment implements PictureContract
         View view = inflater.inflate(R.layout.fragment_benefit, container, false);
         ButterKnife.bind(this, view);
         initView();
-        mPresenter.attachView(this);
+//        mPresenter.attachView(this);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mPresenter.LoadData(mType, mPage, mNum);
+//        mPresenter.LoadData(mType, mPage, mNum);
     }
 
     @Override
@@ -84,7 +82,7 @@ public class PictureFragment extends BaseLoadFragment implements PictureContract
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mPresenter.detachView();
+//        mPresenter.detachView();
     }
 
     public PictureFragment() {
@@ -113,7 +111,7 @@ public class PictureFragment extends BaseLoadFragment implements PictureContract
         mInfoList.setHasFixedSize(true);
         mInfoList.setLayoutManager(mLayoutManager);
         mRefreshLayout.setOnRefreshListener(() -> {
-            mPresenter.LoadData(mType, mPage++, mNum);
+//            mPresenter.LoadData(mType, mPage++, mNum);
         });
         mListAdapter = new PictureListAdapter(this.getActivity());
         mInfoList.setAdapter(mListAdapter);
@@ -140,10 +138,10 @@ public class PictureFragment extends BaseLoadFragment implements PictureContract
                 int lastVisibleItem = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
                 int totalItemCount = mLayoutManager.getItemCount();
                 if (lastVisibleItem == totalItemCount -1  ) {
-                    if (!mPresenter.isLoading()) {
-                        Timber.e("refresh");
-                        mPresenter.LoadData(mType, mPage++, mNum);
-                    }
+//                    if (!mPresenter.isLoading()) {
+//                        Timber.e("refresh");
+//                        mPresenter.LoadData(mType, mPage++, mNum);
+//                    }
                 }
             }
         });

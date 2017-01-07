@@ -64,19 +64,7 @@ public class NetworkApi {
         mGankApiService = mRetrofit.create(GankApiService.class);
     }
 
-    public Observable<List<BaseResult>> getData(int type,int page,int limit){
-        switch (type){
-            case Constant.ANDROID_TYPE:
-               return mGankApiService.getAndroidResult(limit,page).map(new HttpResultFunc<>()) ;
-            case Constant.IOS_TYPE:
-                return mGankApiService.getiOSResult(limit,page).map(new HttpResultFunc<>());
 
-            case Constant.PICTURE_TYPE:
-                return mGankApiService.getPictureResult(limit,page).map(new HttpResultFunc<>());
-
-        }
-        return  null ;
-    }
 
 
 //    /**

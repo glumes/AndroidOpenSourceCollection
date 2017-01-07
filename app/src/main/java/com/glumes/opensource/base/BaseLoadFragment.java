@@ -41,4 +41,5 @@ public abstract class BaseLoadFragment/*<P extends BasePresenter>*/ extends Frag
     }
 
 
+
 }
