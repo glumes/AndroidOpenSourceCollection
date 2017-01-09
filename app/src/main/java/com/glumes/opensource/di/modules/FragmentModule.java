@@ -1,6 +1,9 @@
 package com.glumes.opensource.di.modules;
 
 import com.glumes.opensource.di.scope.FragmentScope;
+import com.glumes.opensource.ui.contract.InfoContract;
+import com.glumes.opensource.ui.model.InfoModel;
+import com.glumes.opensource.ui.presenter.InfoPresenter;
 
 import dagger.Module;
 import dagger.Provides;
@@ -15,5 +18,26 @@ import dagger.Provides;
 @Module
 public class FragmentModule {
 
+    private InfoContract.InfoView mInfoView ;
+    public FragmentModule(InfoContract.InfoView infoView) {
+        this.mInfoView = infoView ;
+    }
 
+    @Provides
+    @FragmentScope
+    InfoContract.Presenter providePresenter(InfoPresenter infoPresenter){
+        return infoPresenter ;
+    }
+
+    @Provides
+    @FragmentScope
+    InfoContract.InfoView provideInfoView(){
+        return this.mInfoView ;
+    }
+
+    @Provides
+    @FragmentScope
+    InfoContract.Model provideModel(){
+        return new InfoModel() ;
+    }
 }

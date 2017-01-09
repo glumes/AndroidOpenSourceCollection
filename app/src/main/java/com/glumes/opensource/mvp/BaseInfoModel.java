@@ -1,4 +1,4 @@
-package com.glumes.opensource.base;
+package com.glumes.opensource.mvp;
 
 import com.glumes.opensource.mvp.IModel;
 import com.glumes.opensource.net.entity.BaseResult;
@@ -11,10 +11,12 @@ import rx.Observable;
  * Created by zhaoying on 2016/11/25.
  */
 
-public class BaseModel implements IModel<Observable<List<BaseResult>>> {
+public class BaseInfoModel implements IModel<Observable<List<BaseResult>>> {
+
+
 
     @Override
-    public Observable<List<BaseResult>> getData(int type, int page, int num) {
+    public Observable<List<BaseResult>> getData(String type, int page, int num) {
 //        return NetworkApi.getInstance().getData(type,page,num);
         return null ;
     }

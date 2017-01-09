@@ -7,7 +7,6 @@ import com.glumes.opensource.di.components.AppComponent;
 import com.glumes.opensource.di.components.DaggerAppComponent;
 import com.glumes.opensource.di.modules.AppModule;
 import com.glumes.opensource.di.modules.HttpModule;
-import com.glumes.opensource.di.modules.RealmModule;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;

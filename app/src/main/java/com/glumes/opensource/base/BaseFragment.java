@@ -11,10 +11,6 @@ import com.glumes.opensource.di.components.HasComponent;
 public  class BaseFragment extends Fragment {
 
 
-
-
-
-
     /**
      * Gets a component for dependency injection by its type.
      *
@@ -25,10 +21,10 @@ public  class BaseFragment extends Fragment {
      * 然后就可以调用接口的 getComponent 方法，得到 Activity 的 Component 。
      *
      */
-    @SuppressWarnings("unchecked")
-    protected <C> C getComponent(Class<C> componentType) {
-        return componentType.cast(((HasComponent<C>) getActivity()).getComponent());
-    }
+//    @SuppressWarnings("unchecked")
+//    protected <C> C getComponent(Class<C> componentType) {
+//        return componentType.cast(((HasComponent<C>) getActivity()).getComponent());
+//    }
 
 
 }

@@ -15,7 +15,7 @@ import com.glumes.opensource.mvp.IView;
  * Created by zhaoying on 2016/11/25.
  */
 
-public abstract class BaseLoadFragment/*<P extends BasePresenter>*/ extends Fragment implements IView {
+public abstract class BaseLoadFragment/*<P extends BaseInfoPresenter>*/ extends BaseFragment implements IView {
 
 //    @Inject
 //    protected P mPresenter ;
@@ -35,11 +35,6 @@ public abstract class BaseLoadFragment/*<P extends BasePresenter>*/ extends Frag
 
 
 //    protected abstract void initPresenter();
-
-    public AppComponent getAppComponent() {
-        return ((MyApplication) getActivity().getApplication()).getAppComponent();
-    }
-
 
 
 }

@@ -27,17 +27,19 @@ public class FragmentPageAdapter extends FragmentPagerAdapter{
 
 
     private Context mContext ;
-    private String tabTitles[] = new String[]{"Tab1","Tab2","Tab3"} ;
-    private final int PAGE_COUT = 3 ;
+    private String tabTitles[] = new String[]{"Android","iOS","前端","拓展资源"} ;
+    private static final int NUM = 10 ;
+    private static final int PAGE = 1 ;
 
     private ArrayList<Fragment> mFragments ;
     public FragmentPageAdapter(FragmentManager fm, Context context) {
         super(fm);
         mContext = context ;
         mFragments = new ArrayList<>();
-        mFragments.add(InfoFragment.newInstance(Constant.PICTURE_TYPE,1,4));
-        mFragments.add(InfoFragment.newInstance(Constant.PICTURE_TYPE,2,4));
-        mFragments.add(InfoFragment.newInstance(Constant.PICTURE_TYPE,3,4));
+        mFragments.add(InfoFragment.newInstance("Android",NUM,PAGE));
+        mFragments.add(InfoFragment.newInstance("iOS",NUM,PAGE));
+        mFragments.add(InfoFragment.newInstance("前端",NUM,PAGE));
+        mFragments.add(InfoFragment.newInstance("拓展资源",NUM,PAGE));
 
     }
 
@@ -58,65 +60,4 @@ public class FragmentPageAdapter extends FragmentPagerAdapter{
     }
 
 
-    /**
-     * Created by zhaoying on 2016/12/7.
-     */
-
-    public static class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.ViewHolder> {
-
-
-        private List<BaseResult> mResults ;
-        private Context mContext ;
-
-
-        public PictureListAdapter(Context context) {
-            mContext = context;
-            mResults = new ArrayList<>() ;
-        }
-
-        public PictureListAdapter(List<BaseResult> results, Context context) {
-            mResults = results;
-            mContext = context;
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_picture,parent,false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            Glide.with(mContext).load(mResults.get(position).getUrl()).into(holder.mImageView);
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return mResults.size();
-        }
-
-
-        public class ViewHolder extends RecyclerView.ViewHolder{
-
-            public ImageView mImageView ;
-
-            public ViewHolder(View itemView) {
-                super(itemView);
-                mImageView = (ImageView) itemView.findViewById(R.id.picture);
-            }
-
-        }
-
-
-        public List<BaseResult> getResults() {
-            return mResults;
-        }
-
-        public void setResults(List<BaseResult> results) {
-            mResults.addAll(results);
-        }
-
-
-    }
 }

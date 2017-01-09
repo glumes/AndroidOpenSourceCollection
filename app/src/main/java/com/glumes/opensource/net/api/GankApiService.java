@@ -18,10 +18,10 @@ import rx.Observable;
 public interface GankApiService {
 
 
-    @GET("data/{type}/{limit}/{page}")
+    @GET("data/{type}/{num}/{page}")
     Observable<HttpResult<List<BaseResult>>> getDataByType(
             @Path("type") String type,
-            @Path("limit") int limit,
+            @Path("num") int num,
             @Path("page") int page
     );
 

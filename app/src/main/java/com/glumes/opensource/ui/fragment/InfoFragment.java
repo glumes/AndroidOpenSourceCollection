@@ -11,19 +11,25 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.glumes.opensource.R;
+import com.glumes.opensource.base.BaseFragment;
 import com.glumes.opensource.base.BaseLoadFragment;
+import com.glumes.opensource.di.components.DaggerFragmentComponent;
+import com.glumes.opensource.di.components.FragmentComponent;
+import com.glumes.opensource.di.modules.FragmentModule;
 import com.glumes.opensource.net.entity.BaseResult;
 import com.glumes.opensource.ui.adapter.FragmentPageAdapter;
 import com.glumes.opensource.ui.contract.InfoContract;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
 
-public class InfoFragment extends BaseLoadFragment implements InfoContract.PictureView {
+public class InfoFragment extends BaseFragment implements InfoContract.InfoView {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -41,20 +47,26 @@ public class InfoFragment extends BaseLoadFragment implements InfoContract.Pictu
     private int mNum;
     RecyclerView.LayoutManager mLayoutManager;
 
-    private FragmentPageAdapter.PictureListAdapter mListAdapter;
+//    private FragmentPageAdapter.PictureListAdapter mListAdapter;
+
+    @Inject
+    public InfoContract.Presenter mPresenter ;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        getComponent(FragmentComponent.class).inject(this);
+
+        DaggerFragmentComponent.builder()
+                .fragmentModule(new FragmentModule(this))
+                .build().inject(this);
+
+
         if (getArguments() != null) {
             mType = getArguments().getInt(ARG_PARAM1);
             mPage = getArguments().getInt(ARG_PARAM2);
             mNum = getArguments().getInt(ARG_PARAM3);
-            Timber.d("type is %d", mType);
         }
-
-//        DaggerFragmentComponent.builder().appComponent(getAppComponent())
-//                .fragmentModule(new FragmentModule()).build().inject(this);
 
     }
 
@@ -65,7 +77,7 @@ public class InfoFragment extends BaseLoadFragment implements InfoContract.Pictu
         View view = inflater.inflate(R.layout.fragment_benefit, container, false);
         ButterKnife.bind(this, view);
         initView();
-//        mPresenter.attachView(this);
+        mPresenter.attachView(this);
         return view;
     }
 
@@ -91,21 +103,15 @@ public class InfoFragment extends BaseLoadFragment implements InfoContract.Pictu
         // Required empty public constructor
     }
 
-    public static InfoFragment newInstance(int type, int page, int num) {
+    public static InfoFragment newInstance(String type, int limit, int page) {
         InfoFragment fragment = new InfoFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, type);
-        args.putInt(ARG_PARAM2, page);
-        args.putInt(ARG_PARAM3, num);
+        args.putString(ARG_PARAM1, type);
+        args.putInt(ARG_PARAM2, limit);
+        args.putInt(ARG_PARAM3, page);
         fragment.setArguments(args);
         return fragment;
     }
-
-
-    //    @Override
-//    protected void initPresenter() {
-//        mPresenter = new InfoPresenter();
-//    }
 
 
     void initView() {
@@ -115,8 +121,8 @@ public class InfoFragment extends BaseLoadFragment implements InfoContract.Pictu
         mRefreshLayout.setOnRefreshListener(() -> {
 //            mPresenter.LoadData(mType, mPage++, mNum);
         });
-        mListAdapter = new FragmentPageAdapter.PictureListAdapter(this.getActivity());
-        mInfoList.setAdapter(mListAdapter);
+//        mListAdapter = new FragmentPageAdapter.PictureListAdapter(this.getActivity());
+//        mInfoList.setAdapter(mListAdapter);
 
         mInfoList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -163,13 +169,14 @@ public class InfoFragment extends BaseLoadFragment implements InfoContract.Pictu
 
     @Override
     public void showContent(List<BaseResult> baseResults) {
-        mListAdapter.setResults(baseResults);
-        mListAdapter.notifyDataSetChanged();
+//        mListAdapter.setResults(baseResults);
+//        mListAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void showFailed(Throwable e) {
         Timber.e("error msg is %s", e.getMessage());
     }
+
 
 }

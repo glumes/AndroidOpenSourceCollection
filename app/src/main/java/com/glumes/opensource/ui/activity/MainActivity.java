@@ -9,9 +9,7 @@ import android.view.MenuItem;
 
 import com.glumes.opensource.R;
 import com.glumes.opensource.base.BaseActivity;
-import com.glumes.opensource.di.components.ActivityComponent;
 import com.glumes.opensource.di.components.DaggerActivityComponent;
-import com.glumes.opensource.di.components.HasComponent;
 import com.glumes.opensource.di.modules.ActivityModule;
 import com.glumes.opensource.di.modules.GankApiModule;
 import com.glumes.opensource.ui.adapter.FragmentPageAdapter;
@@ -20,10 +18,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class MainActivity extends BaseActivity implements HasComponent<ActivityComponent>{
+public class MainActivity extends BaseActivity /*implements HasComponent<FragmentComponent>*/{
 
-    private static final int LIMIT = 10;
-    private static final int PAGE = 2;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -37,26 +33,21 @@ public class MainActivity extends BaseActivity implements HasComponent<ActivityC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getComponent().inject(this);
-
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
         mToolbar.inflateMenu(R.menu.base_toolbar_menu);
-        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()){
+        mToolbar.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()){
 
-                    case R.id.action_item1:
-                        Timber.d("item1");
-                        break;
-                    case R.id.action_item2:
-                        Timber.d("item2");
-                        break;
-                }
-                return true;
+                case R.id.action_item1:
+                    Timber.d("item1");
+                    break;
+                case R.id.action_item2:
+                    Timber.d("item2");
+                    break;
             }
+            return true;
         });
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -74,11 +65,18 @@ public class MainActivity extends BaseActivity implements HasComponent<ActivityC
         super.onDestroy();
     }
 
+//    @Override
+//    public FragmentComponent getComponent() {
+//        return DaggerFragmentComponent.builder()
+//                .fragmentModule(new FragmentModule())
+//                .build() ;
+//    }
+
     @Override
-    public ActivityComponent getComponent() {
-        return DaggerActivityComponent.builder()
+    protected void initComponentInject() {
+        DaggerActivityComponent.builder()
                 .gankApiModule(new GankApiModule())
                 .activityModule(new ActivityModule(this))
-                .build();
+                .build().inject(this);
     }
 }
