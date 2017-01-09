@@ -6,6 +6,7 @@ import com.glumes.opensource.net.entity.BaseResult;
 import com.glumes.opensource.ui.contract.InfoContract;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -41,6 +42,7 @@ public class InfoPresenter extends BasePresenter<InfoContract.InfoView,InfoContr
     @Override
     public void LoadData(String type, int page, int num) {
         mSubscription.add(mModel.getData(type, page, num)
+                .delay(2, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(() -> {

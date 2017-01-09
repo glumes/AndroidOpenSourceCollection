@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.glumes.opensource.R;
 import com.glumes.opensource.net.entity.BaseResult;
@@ -23,7 +24,9 @@ import butterknife.ButterKnife;
 
 public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-
+    private static final int ITEM_HEADER = 1;
+    private static final int ITEM_BASE = 2;
+    private static final int ITEM_FOOTER = 3;
 
     private List<BaseResult> mResults;
     private Context mContext;
@@ -40,9 +43,16 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        if (viewType == ITEM_FOOTER){
+            View view = LayoutInflater.from(mContext).inflate(R.layout.item_refresh_footer, parent, false);
+            return new FooterViewHolder(view);
+        }
+
+
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_info, parent, false);
-        return new ViewHolder(view);
+        return new ItemViewHolder(view);
     }
 
     @Override
@@ -50,19 +60,23 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     }
 
-//    @Override
-//    public void onBindViewHolder(ViewHolder holder, int position) {
-//        Glide.with(mContext).load(mResults.get(position).getUrl()).into(holder.mImageView);
-//
-//    }
 
     @Override
     public int getItemCount() {
-        return mResults.size();
+        return mResults.size() == 0 ? 0 : mResults.size() + 1 ;
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public int getItemViewType(int position) {
+        if (position + 1 == getItemCount()){
+            return ITEM_FOOTER ;
+        }
+
+        return ITEM_BASE ;
+    }
+
+    public class ItemViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.iv_item_img)
         ImageView mIvItemImg;
@@ -74,11 +88,21 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         AppCompatTextView mTvItemTime;
 
 
-        public ViewHolder(View itemView) {
+        public ItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(itemView);
         }
 
+    }
+
+    static class FooterViewHolder extends RecyclerView.ViewHolder {
+
+        TextView mTextView;
+
+        public FooterViewHolder(View itemView) {
+            super(itemView);
+            mTextView = (TextView) itemView.findViewById(R.id.tv_load);
+        }
     }
 
     public List<BaseResult> getResults() {

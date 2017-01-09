@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.glumes.opensource.MyApplication;
 import com.glumes.opensource.R;
@@ -155,11 +156,15 @@ public class InfoFragment extends BaseFragment implements InfoContract.InfoView 
 //            }
 //        });
 
-        mInfoList.addOnScrollListener(new RecyclerViewScrollListener(mLayoutManager,4) {
+        mInfoList.addOnScrollListener(new RecyclerViewScrollListener(mLayoutManager,1) {
             @Override
             protected void loadMore() {
                 if (!mPresenter.isLoading()){
                     Timber.d("load data");
+                    if (mRefreshLayout.isRefreshing()){
+                        mInfoListAdapter.notifyItemRemoved(mInfoListAdapter.getItemCount());
+                    }
+
                     mPresenter.LoadData(mType,mPage++,mNum);
                 }
             }
@@ -186,8 +191,8 @@ public class InfoFragment extends BaseFragment implements InfoContract.InfoView 
 
     @Override
     public void showFailed(Throwable e) {
+        Toast.makeText(getActivity(),"load data failed",Toast.LENGTH_SHORT).show();
         Timber.e("error msg is %s", e.getMessage());
     }
-
 
 }
