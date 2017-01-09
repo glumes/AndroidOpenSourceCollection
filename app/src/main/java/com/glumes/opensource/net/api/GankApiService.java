@@ -5,6 +5,8 @@ import com.glumes.opensource.net.entity.HttpResult;
 
 import java.util.List;
 
+import javax.annotation.Generated;
+
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import rx.Observable;
@@ -23,17 +25,10 @@ public interface GankApiService {
             @Path("page") int page
     );
 
-
-    @GET("data/iOS/{limit}/{page}")
-    Observable<HttpResult<List<BaseResult>>> getiOSResult(
-            @Path("limit") int limit,
-            @Path("page") int page
-    );
-
-    @GET("data/福利/{limit}/{page}")
-    Observable<HttpResult<List<BaseResult>>> getPictureResult(
-            @Path("limit") int limit,
-            @Path("page") int page
+    @GET("random/data/{type}/{num}")
+    Observable<HttpResult<List<BaseResult>>> getRandomData(
+            @Path("type") String type,
+            @Path("num") int num
     );
 
 

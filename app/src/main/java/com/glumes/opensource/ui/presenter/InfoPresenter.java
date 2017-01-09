@@ -1,22 +1,23 @@
-package com.glumes.opensource.ui.fragment;
+package com.glumes.opensource.ui.presenter;
 
 import com.glumes.opensource.base.BaseModel;
 import com.glumes.opensource.base.BasePresenter;
+import com.glumes.opensource.ui.contract.InfoContract;
 
 /**
  * Created by zhaoying on 16/11/10.
  */
 
-public class PicturePresenter  extends BasePresenter<PictureContract.PictureView,BaseModel>{
+public class InfoPresenter extends BasePresenter<InfoContract.PictureView,BaseModel>{
 
 
 
-    public PicturePresenter() {
+    public InfoPresenter() {
 
     }
 
     @Override
-    public void attachView(PictureContract.PictureView view) {
+    public void attachView(InfoContract.PictureView view) {
         super.attachView(view);
     }
 

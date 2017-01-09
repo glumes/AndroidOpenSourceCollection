@@ -4,6 +4,10 @@ import android.app.Application;
 
 import com.facebook.stetho.Stetho;
 import com.glumes.opensource.di.components.AppComponent;
+import com.glumes.opensource.di.components.DaggerAppComponent;
+import com.glumes.opensource.di.modules.AppModule;
+import com.glumes.opensource.di.modules.HttpModule;
+import com.glumes.opensource.di.modules.RealmModule;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -30,7 +34,7 @@ public class MyApplication extends Application {
         initRealmConfig();
         initTimber();
         initStetho();
-
+        initAppComponent();
     }
 
     private void initTimber() {
@@ -46,7 +50,6 @@ public class MyApplication extends Application {
         Realm.setDefaultConfiguration(config);
     }
 
-
     public void initStetho() {
         Stetho.initialize(Stetho.newInitializerBuilder(this)
                 .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
@@ -54,6 +57,12 @@ public class MyApplication extends Application {
                 .build());
     }
 
+    public void initAppComponent(){
+        mAppComponent = DaggerAppComponent.builder()
+                .appModule(new AppModule(this))
+                .httpModule(new HttpModule())
+                .build() ;
+    }
 
     public AppComponent getAppComponent(){
         return mAppComponent ;

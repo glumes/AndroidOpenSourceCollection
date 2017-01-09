@@ -9,13 +9,18 @@ import android.view.MenuItem;
 
 import com.glumes.opensource.R;
 import com.glumes.opensource.base.BaseActivity;
+import com.glumes.opensource.di.components.ActivityComponent;
+import com.glumes.opensource.di.components.DaggerActivityComponent;
+import com.glumes.opensource.di.components.HasComponent;
+import com.glumes.opensource.di.modules.ActivityModule;
+import com.glumes.opensource.di.modules.GankApiModule;
 import com.glumes.opensource.ui.adapter.FragmentPageAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements HasComponent<ActivityComponent>{
 
     private static final int LIMIT = 10;
     private static final int PAGE = 2;
@@ -28,11 +33,11 @@ public class MainActivity extends BaseActivity {
     ViewPager mViewPager;
     FragmentPageAdapter mPageAdapter ;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getComponent().inject(this);
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -62,7 +67,6 @@ public class MainActivity extends BaseActivity {
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);
 
-
     }
 
     @Override
@@ -70,9 +74,11 @@ public class MainActivity extends BaseActivity {
         super.onDestroy();
     }
 
-
     @Override
-    public void injectModule() {
-        getActivityComponent().inject(this);
+    public ActivityComponent getComponent() {
+        return DaggerActivityComponent.builder()
+                .gankApiModule(new GankApiModule())
+                .activityModule(new ActivityModule(this))
+                .build();
     }
 }

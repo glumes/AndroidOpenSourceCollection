@@ -1,7 +1,6 @@
 package com.glumes.opensource.base;
 
 import com.glumes.opensource.mvp.IModel;
-import com.glumes.opensource.net.NetworkApi;
 import com.glumes.opensource.net.entity.BaseResult;
 
 import java.util.List;

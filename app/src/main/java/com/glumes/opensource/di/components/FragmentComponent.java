@@ -2,10 +2,9 @@ package com.glumes.opensource.di.components;
 
 import com.glumes.opensource.di.modules.FragmentModule;
 import com.glumes.opensource.di.scope.FragmentScope;
-import com.glumes.opensource.ui.fragment.PictureFragment;
+import com.glumes.opensource.ui.fragment.InfoFragment;
 
 import dagger.Component;
-import dagger.Subcomponent;
 
 /**
  * Created by zhaoying on 2017/1/3.
@@ -20,10 +19,10 @@ import dagger.Subcomponent;
  */
 
 @FragmentScope
-@Subcomponent(modules = FragmentModule.class)
+@Component(modules = FragmentModule.class)
 public interface FragmentComponent {
 
-    void inject(PictureFragment fragment);
+    void inject(InfoFragment fragment);
 
 
 }

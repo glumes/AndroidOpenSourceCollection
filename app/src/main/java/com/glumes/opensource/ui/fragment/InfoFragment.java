@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import com.glumes.opensource.R;
 import com.glumes.opensource.base.BaseLoadFragment;
 import com.glumes.opensource.net.entity.BaseResult;
+import com.glumes.opensource.ui.adapter.FragmentPageAdapter;
+import com.glumes.opensource.ui.contract.InfoContract;
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 
 
-public class PictureFragment extends BaseLoadFragment implements PictureContract.PictureView {
+public class InfoFragment extends BaseLoadFragment implements InfoContract.PictureView {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -39,7 +41,7 @@ public class PictureFragment extends BaseLoadFragment implements PictureContract
     private int mNum;
     RecyclerView.LayoutManager mLayoutManager;
 
-    private PictureListAdapter mListAdapter;
+    private FragmentPageAdapter.PictureListAdapter mListAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,12 +87,12 @@ public class PictureFragment extends BaseLoadFragment implements PictureContract
 //        mPresenter.detachView();
     }
 
-    public PictureFragment() {
+    public InfoFragment() {
         // Required empty public constructor
     }
 
-    public static PictureFragment newInstance(int type, int page, int num) {
-        PictureFragment fragment = new PictureFragment();
+    public static InfoFragment newInstance(int type, int page, int num) {
+        InfoFragment fragment = new InfoFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, type);
         args.putInt(ARG_PARAM2, page);
@@ -102,7 +104,7 @@ public class PictureFragment extends BaseLoadFragment implements PictureContract
 
     //    @Override
 //    protected void initPresenter() {
-//        mPresenter = new PicturePresenter();
+//        mPresenter = new InfoPresenter();
 //    }
 
 
@@ -113,7 +115,7 @@ public class PictureFragment extends BaseLoadFragment implements PictureContract
         mRefreshLayout.setOnRefreshListener(() -> {
 //            mPresenter.LoadData(mType, mPage++, mNum);
         });
-        mListAdapter = new PictureListAdapter(this.getActivity());
+        mListAdapter = new FragmentPageAdapter.PictureListAdapter(this.getActivity());
         mInfoList.setAdapter(mListAdapter);
 
         mInfoList.addOnScrollListener(new RecyclerView.OnScrollListener() {

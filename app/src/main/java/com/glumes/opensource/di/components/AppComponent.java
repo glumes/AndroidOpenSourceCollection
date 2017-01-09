@@ -31,7 +31,6 @@ import retrofit2.Retrofit;
         modules = {
                 AppModule.class,
                 HttpModule.class,
-                RealmModule.class
         }
 )
 public interface AppComponent {
@@ -44,6 +43,7 @@ public interface AppComponent {
     Gson gson();
 
     Retrofit retrofit();
+
 
 
 }

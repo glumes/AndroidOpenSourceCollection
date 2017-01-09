@@ -2,6 +2,7 @@ package com.glumes.opensource.di.components;
 
 import com.glumes.opensource.di.modules.ActivityModule;
 import com.glumes.opensource.di.modules.GankApiModule;
+import com.glumes.opensource.di.scope.ActivityScope;
 import com.glumes.opensource.ui.activity.MainActivity;
 
 import dagger.Component;
@@ -16,6 +17,8 @@ import dagger.Component;
  * 1、选择继承或依赖该 Component ，完成注入，同时新建具体业务的 Scope 范围。
  * 2、新建具体业务 Component 完成注入
  */
+
+@ActivityScope
 @Component(
         modules = {
                 GankApiModule.class,
@@ -24,9 +27,6 @@ import dagger.Component;
 )
 public interface ActivityComponent {
 
-    FragmentComponent plus();
-
     void inject(MainActivity mainActivity);
-
 
 }
