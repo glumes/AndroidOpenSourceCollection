@@ -21,7 +21,6 @@ import dagger.Component;
 @ActivityScope
 @Component(
         modules = {
-                GankApiModule.class,
                 ActivityModule.class
         }
 )

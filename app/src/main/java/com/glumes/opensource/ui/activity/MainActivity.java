@@ -75,7 +75,6 @@ public class MainActivity extends BaseActivity /*implements HasComponent<Fragmen
     @Override
     protected void initComponentInject() {
         DaggerActivityComponent.builder()
-                .gankApiModule(new GankApiModule())
                 .activityModule(new ActivityModule(this))
                 .build().inject(this);
     }

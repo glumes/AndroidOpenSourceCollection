@@ -1,6 +1,7 @@
 package com.glumes.opensource.di.modules;
 
 import com.glumes.opensource.di.scope.FragmentScope;
+import com.glumes.opensource.net.api.GankApiService;
 import com.glumes.opensource.ui.contract.InfoContract;
 import com.glumes.opensource.ui.model.InfoModel;
 import com.glumes.opensource.ui.presenter.InfoPresenter;
@@ -37,7 +38,7 @@ public class FragmentModule {
 
     @Provides
     @FragmentScope
-    InfoContract.Model provideModel(){
-        return new InfoModel() ;
+    InfoContract.Model provideModel(GankApiService gankApiService){
+        return new InfoModel(gankApiService) ;
     }
 }

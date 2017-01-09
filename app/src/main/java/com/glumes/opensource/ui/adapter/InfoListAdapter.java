@@ -1,33 +1,37 @@
 package com.glumes.opensource.ui.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.glumes.opensource.R;
 import com.glumes.opensource.net.entity.BaseResult;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by zhaoying on 2017/1/9.
  */
 
-public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<BaseResult> mResults ;
-    private Context mContext ;
 
+
+    private List<BaseResult> mResults;
+    private Context mContext;
 
 
     public InfoListAdapter(Context context) {
         mContext = context;
-        mResults = new ArrayList<>() ;
+        mResults = new ArrayList<>();
     }
 
     public InfoListAdapter(List<BaseResult> results, Context context) {
@@ -37,7 +41,7 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_picture,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_info, parent, false);
         return new ViewHolder(view);
     }
 
@@ -58,13 +62,21 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView mImageView ;
+        @BindView(R.id.iv_item_img)
+        ImageView mIvItemImg;
+        @BindView(R.id.tv_item_title)
+        AppCompatTextView mTvItemTitle;
+        @BindView(R.id.tv_item_publisher)
+        AppCompatTextView mTvItemPublisher;
+        @BindView(R.id.tv_item_time)
+        AppCompatTextView mTvItemTime;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mImageView = (ImageView) itemView.findViewById(R.id.picture);
+            ButterKnife.bind(itemView);
         }
 
     }

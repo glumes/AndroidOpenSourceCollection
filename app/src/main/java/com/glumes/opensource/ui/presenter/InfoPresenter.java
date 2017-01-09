@@ -1,7 +1,6 @@
 package com.glumes.opensource.ui.presenter;
 
-import com.glumes.opensource.base.BaseInfoPresenter;
-import com.glumes.opensource.mvp.BaseInfoModel;
+import com.glumes.opensource.base.BasePresenter;
 import com.glumes.opensource.net.LoadSubscriber;
 import com.glumes.opensource.net.entity.BaseResult;
 import com.glumes.opensource.ui.contract.InfoContract;
@@ -17,12 +16,14 @@ import rx.schedulers.Schedulers;
  * Created by zhaoying on 16/11/10.
  */
 
-public class InfoPresenter extends BaseInfoPresenter<InfoContract.InfoView,BaseInfoModel> implements InfoContract.Presenter{
+public class InfoPresenter extends BasePresenter<InfoContract.InfoView,InfoContract.Model> implements InfoContract
+        .Presenter{
 
 
     private boolean isLoading;
 
-    public InfoPresenter(InfoContract.InfoView view, BaseInfoModel model) {
+    @Inject
+    public InfoPresenter(InfoContract.InfoView view, InfoContract.Model model) {
         super(view, model);
     }
 
@@ -63,6 +64,7 @@ public class InfoPresenter extends BaseInfoPresenter<InfoContract.InfoView,BaseI
                 }));
     }
 
+    @Override
     public boolean isLoading() {
         return isLoading;
     }

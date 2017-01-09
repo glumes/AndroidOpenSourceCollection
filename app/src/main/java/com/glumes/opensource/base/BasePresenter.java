@@ -1,17 +1,12 @@
 package com.glumes.opensource.base;
 
-import com.glumes.opensource.mvp.BaseInfoModel;
+import com.glumes.opensource.mvp.IModel;
 import com.glumes.opensource.mvp.IPresenter;
-import com.glumes.opensource.net.LoadSubscriber;
+import com.glumes.opensource.mvp.IView;
 import com.glumes.opensource.net.entity.BaseResult;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
-import dagger.Module;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -20,7 +15,7 @@ import timber.log.Timber;
  */
 
 
-public abstract class BaseInfoPresenter<T extends LoadView<List<BaseResult>>, M extends BaseInfoModel>
+public abstract class BasePresenter<T extends IView, M extends IModel>
         implements IPresenter<T> {
 
     public CompositeSubscription mSubscription;
@@ -30,14 +25,14 @@ public abstract class BaseInfoPresenter<T extends LoadView<List<BaseResult>>, M 
 
     protected M mModel;
 
-    public BaseInfoPresenter(T view, M model) {
+    public BasePresenter(T view, M model) {
         mView = view;
         mModel = model;
     }
 
     @Override
     public void attachView(T t) {
-        mView = t;
+//        mView = t;
         mSubscription = new CompositeSubscription();
     }
 

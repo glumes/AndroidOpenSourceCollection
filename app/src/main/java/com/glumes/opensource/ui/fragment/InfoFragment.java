@@ -10,15 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.glumes.opensource.MyApplication;
 import com.glumes.opensource.R;
 import com.glumes.opensource.base.BaseFragment;
-import com.glumes.opensource.base.BaseLoadFragment;
 import com.glumes.opensource.di.components.DaggerFragmentComponent;
-import com.glumes.opensource.di.components.FragmentComponent;
 import com.glumes.opensource.di.modules.FragmentModule;
+import com.glumes.opensource.di.modules.GankApiModule;
 import com.glumes.opensource.net.entity.BaseResult;
-import com.glumes.opensource.ui.adapter.FragmentPageAdapter;
+import com.glumes.opensource.ui.adapter.InfoListAdapter;
 import com.glumes.opensource.ui.contract.InfoContract;
+import com.glumes.opensource.view.RecyclerViewScrollListener;
 
 import java.util.List;
 
@@ -41,13 +42,13 @@ public class InfoFragment extends BaseFragment implements InfoContract.InfoView 
     SwipeRefreshLayout mRefreshLayout;
 
 
-    private int mType;
+    private String mType;
 
     private int mPage;
     private int mNum;
     RecyclerView.LayoutManager mLayoutManager;
 
-//    private FragmentPageAdapter.PictureListAdapter mListAdapter;
+    private InfoListAdapter mInfoListAdapter ;
 
     @Inject
     public InfoContract.Presenter mPresenter ;
@@ -55,15 +56,14 @@ public class InfoFragment extends BaseFragment implements InfoContract.InfoView 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        getComponent(FragmentComponent.class).inject(this);
-
         DaggerFragmentComponent.builder()
+                .appComponent(MyApplication.getInstance().getAppComponent())
                 .fragmentModule(new FragmentModule(this))
+                .gankApiModule(new GankApiModule())
                 .build().inject(this);
 
-
         if (getArguments() != null) {
-            mType = getArguments().getInt(ARG_PARAM1);
+            mType = getArguments().getString(ARG_PARAM1);
             mPage = getArguments().getInt(ARG_PARAM2);
             mNum = getArguments().getInt(ARG_PARAM3);
         }
@@ -84,7 +84,7 @@ public class InfoFragment extends BaseFragment implements InfoContract.InfoView 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        mPresenter.LoadData(mType, mPage, mNum);
+        mPresenter.LoadData(mType, mPage, mNum);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class InfoFragment extends BaseFragment implements InfoContract.InfoView 
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        mPresenter.detachView();
+        mPresenter.detachView();
     }
 
     public InfoFragment() {
@@ -119,37 +119,48 @@ public class InfoFragment extends BaseFragment implements InfoContract.InfoView 
         mInfoList.setHasFixedSize(true);
         mInfoList.setLayoutManager(mLayoutManager);
         mRefreshLayout.setOnRefreshListener(() -> {
-//            mPresenter.LoadData(mType, mPage++, mNum);
+            mPresenter.LoadData(mType, mPage++, mNum);
         });
-//        mListAdapter = new FragmentPageAdapter.PictureListAdapter(this.getActivity());
-//        mInfoList.setAdapter(mListAdapter);
 
-        mInfoList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-//                Timber.d("state is %d", newState);
-            }
+        mInfoListAdapter = new InfoListAdapter(this.getActivity());
 
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-//                Timber.d("scrolled dx is %d,dy is %d", dx, dy);
-                Timber.d("totalItemCount is %d", mLayoutManager.getItemCount());
-                Timber.d("child Count is %d", mInfoList.getChildCount());
-                Timber.d("FirstVisibleItem is %d", ((LinearLayoutManager) mLayoutManager).findFirstVisibleItemPosition
-                        ());
-                Timber.d("LastVisibleItem is %d", ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition());
-                Timber.d("firstCompleteVisibleImte is %d", ((LinearLayoutManager) mLayoutManager)
-                        .findFirstCompletelyVisibleItemPosition());
-
-                int lastVisibleItem = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
-                int totalItemCount = mLayoutManager.getItemCount();
-                if (lastVisibleItem == totalItemCount -1  ) {
+        mInfoList.setAdapter(mInfoListAdapter);
+//        mInfoList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+////                Timber.d("state is %d", newState);
+//            }
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+////                Timber.d("scrolled dx is %d,dy is %d", dx, dy);
+//                Timber.d("totalItemCount is %d", mLayoutManager.getItemCount());
+//                Timber.d("child Count is %d", mInfoList.getChildCount());
+//                Timber.d("FirstVisibleItem is %d", ((LinearLayoutManager) mLayoutManager).findFirstVisibleItemPosition
+//                        ());
+//                Timber.d("LastVisibleItem is %d", ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition());
+//                Timber.d("firstCompleteVisibleImte is %d", ((LinearLayoutManager) mLayoutManager)
+//                        .findFirstCompletelyVisibleItemPosition());
+//
+//                int lastVisibleItem = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
+//                int totalItemCount = mLayoutManager.getItemCount();
+//                if (lastVisibleItem == totalItemCount -1  ) {
 //                    if (!mPresenter.isLoading()) {
 //                        Timber.e("refresh");
 //                        mPresenter.LoadData(mType, mPage++, mNum);
 //                    }
+//                }
+//            }
+//        });
+
+        mInfoList.addOnScrollListener(new RecyclerViewScrollListener(mLayoutManager,4) {
+            @Override
+            protected void loadMore() {
+                if (!mPresenter.isLoading()){
+                    Timber.d("load data");
+                    mPresenter.LoadData(mType,mPage++,mNum);
                 }
             }
         });
@@ -169,8 +180,8 @@ public class InfoFragment extends BaseFragment implements InfoContract.InfoView 
 
     @Override
     public void showContent(List<BaseResult> baseResults) {
-//        mListAdapter.setResults(baseResults);
-//        mListAdapter.notifyDataSetChanged();
+        mInfoListAdapter.setResults(baseResults);
+        mInfoListAdapter.notifyDataSetChanged();
     }
 
     @Override
