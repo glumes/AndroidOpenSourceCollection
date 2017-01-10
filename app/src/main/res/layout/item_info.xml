@@ -48,7 +48,8 @@
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_item_author" />
+                android:scaleType="fitCenter"
+                app:srcCompat="@mipmap/author" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tv_item_publisher"
@@ -61,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                app:srcCompat="@drawable/ic_item_time" />
+                app:srcCompat="@mipmap/publish_time" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tv_item_time"

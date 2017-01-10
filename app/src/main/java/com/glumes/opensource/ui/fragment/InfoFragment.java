@@ -65,8 +65,8 @@ public class InfoFragment extends BaseFragment implements InfoContract.InfoView 
 
         if (getArguments() != null) {
             mType = getArguments().getString(ARG_PARAM1);
-            mPage = getArguments().getInt(ARG_PARAM2);
-            mNum = getArguments().getInt(ARG_PARAM3);
+            mNum = getArguments().getInt(ARG_PARAM2);
+            mPage = getArguments().getInt(ARG_PARAM3);
         }
 
     }
@@ -85,13 +85,14 @@ public class InfoFragment extends BaseFragment implements InfoContract.InfoView 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mPresenter.LoadData(mType, mPage, mNum);
+        Timber.d("load data onViewCreated");
+
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        mPresenter.LoadData(mType, mNum, mPage,true);
     }
 
     @Override
@@ -120,41 +121,12 @@ public class InfoFragment extends BaseFragment implements InfoContract.InfoView 
         mInfoList.setHasFixedSize(true);
         mInfoList.setLayoutManager(mLayoutManager);
         mRefreshLayout.setOnRefreshListener(() -> {
-            mPresenter.LoadData(mType, mPage++, mNum);
+            mPresenter.LoadData(mType, mNum, mPage++,true);
         });
 
         mInfoListAdapter = new InfoListAdapter(this.getActivity());
 
         mInfoList.setAdapter(mInfoListAdapter);
-//        mInfoList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-////                Timber.d("state is %d", newState);
-//            }
-//
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-////                Timber.d("scrolled dx is %d,dy is %d", dx, dy);
-//                Timber.d("totalItemCount is %d", mLayoutManager.getItemCount());
-//                Timber.d("child Count is %d", mInfoList.getChildCount());
-//                Timber.d("FirstVisibleItem is %d", ((LinearLayoutManager) mLayoutManager).findFirstVisibleItemPosition
-//                        ());
-//                Timber.d("LastVisibleItem is %d", ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition());
-//                Timber.d("firstCompleteVisibleImte is %d", ((LinearLayoutManager) mLayoutManager)
-//                        .findFirstCompletelyVisibleItemPosition());
-//
-//                int lastVisibleItem = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
-//                int totalItemCount = mLayoutManager.getItemCount();
-//                if (lastVisibleItem == totalItemCount -1  ) {
-//                    if (!mPresenter.isLoading()) {
-//                        Timber.e("refresh");
-//                        mPresenter.LoadData(mType, mPage++, mNum);
-//                    }
-//                }
-//            }
-//        });
 
         mInfoList.addOnScrollListener(new RecyclerViewScrollListener(mLayoutManager,1) {
             @Override
@@ -165,7 +137,7 @@ public class InfoFragment extends BaseFragment implements InfoContract.InfoView 
                         mInfoListAdapter.notifyItemRemoved(mInfoListAdapter.getItemCount());
                     }
 
-                    mPresenter.LoadData(mType,mPage++,mNum);
+                    mPresenter.LoadData(mType,mNum,mPage++,false);
                 }
             }
         });
@@ -185,14 +157,14 @@ public class InfoFragment extends BaseFragment implements InfoContract.InfoView 
 
     @Override
     public void showContent(List<BaseResult> baseResults) {
-        mInfoListAdapter.setResults(baseResults);
+        mInfoListAdapter.setData(baseResults);
         mInfoListAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void showFailed(Throwable e) {
-        Toast.makeText(getActivity(),"load data failed",Toast.LENGTH_SHORT).show();
-        Timber.e("error msg is %s", e.getMessage());
+        Toast.makeText(getActivity(),R.string.load_data_failed,Toast.LENGTH_SHORT).show();
+        mInfoListAdapter.notifyItemRemoved(mInfoListAdapter.getItemCount());
     }
 
 }

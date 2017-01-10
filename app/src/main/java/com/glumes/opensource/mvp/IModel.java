@@ -6,5 +6,5 @@ package com.glumes.opensource.mvp;
 
 public interface IModel<T> {
 
-    T getData(String type,int page,int num );
+    T getData(String type,int num,int page );
 }

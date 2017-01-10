@@ -9,4 +9,6 @@
     <string name="menu_item_02">item_02</string>
 
     <string name="github">github</string>
+
+    <string name="load_data_failed">数据加载失败，请检查网络连接...</string>
 </resources>

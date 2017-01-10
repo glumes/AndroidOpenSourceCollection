@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.glumes.opensource.R;
 import com.glumes.opensource.net.entity.BaseResult;
 
@@ -17,6 +18,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 /**
  * Created by zhaoying on 2017/1/9.
@@ -28,17 +30,17 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int ITEM_BASE = 2;
     private static final int ITEM_FOOTER = 3;
 
-    private List<BaseResult> mResults;
+    private List<BaseResult> mData;
     private Context mContext;
 
 
     public InfoListAdapter(Context context) {
         mContext = context;
-        mResults = new ArrayList<>();
+        mData = new ArrayList<>();
     }
 
     public InfoListAdapter(List<BaseResult> results, Context context) {
-        mResults = results;
+        mData = results;
         mContext = context;
     }
 
@@ -57,13 +59,29 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
+        if (position + 1 != getItemCount()){
+            ((ItemViewHolder)holder).mTvItemTitle.setText(mData.get(position).getDesc() == null ? "error" : mData.get
+                    (position).getDesc());
+            Timber.d(mData.get(position).getDesc());
+            ((ItemViewHolder)holder).mTvItemPublisher.setText(mData.get(position).getWho() == null ? "error" : mData
+                    .get(position).getWho());
+            ((ItemViewHolder)holder).mTvItemTime.setText(mData.get(position).getPublishedAt() == null ? "error" :
+                    mData.get(position).getPublishedAt());
+            if (mData.get(position).getImages() != null  ){
+                Timber.d(mData.get(position).getImages().get(0) +  "?imageView2/0/w/200");
+                Glide.with(mContext).load(mData.get(position).getImages().get(0) + "?imageView2/0/w/200").into((
+                        (ItemViewHolder)holder).mIvItemImg);
+            }else {
+                Glide.with(mContext).load(R.mipmap.image_default).into(((ItemViewHolder)holder)
+                        .mIvItemImg);
+            }
+        }
     }
 
 
     @Override
     public int getItemCount() {
-        return mResults.size() == 0 ? 0 : mResults.size() + 1 ;
+        return mData.size() == 0 ? 0 : mData.size() + 1 ;
     }
 
 
@@ -72,7 +90,6 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (position + 1 == getItemCount()){
             return ITEM_FOOTER ;
         }
-
         return ITEM_BASE ;
     }
 
@@ -90,7 +107,7 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         public ItemViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(itemView);
+            ButterKnife.bind(this,itemView);
         }
 
     }
@@ -105,12 +122,12 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    public List<BaseResult> getResults() {
-        return mResults;
+    public List<BaseResult> getData() {
+        return mData;
     }
 
-    public void setResults(List<BaseResult> results) {
-        mResults.addAll(results);
+    public void setData(List<BaseResult> data) {
+        mData.addAll(data);
     }
 
 }

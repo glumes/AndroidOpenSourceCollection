@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 /**
  * Created by zhaoying on 16/11/10.
@@ -40,18 +41,18 @@ public class InfoPresenter extends BasePresenter<InfoContract.InfoView,InfoContr
 
 
     @Override
-    public void LoadData(String type, int page, int num) {
-        mSubscription.add(mModel.getData(type, page, num)
-                .delay(2, TimeUnit.SECONDS)
+    public void LoadData(String type, int num, int page,boolean showLoding) {
+        Timber.d("type is %s , page is %d ,num is %d",type,page,num);
+        mSubscription.add(mModel.getData(type, num, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(() -> {
                     isLoading = true;
-                    mView.showLoading();
+                    if (showLoding) mView.showLoading();
                 })
                 .doOnTerminate(() -> {
                     isLoading = false;
-                    mView.dismissLoading();
+                    if (showLoding) mView.dismissLoading();
                 })
                 .subscribe(new LoadSubscriber<List<BaseResult>>() {
                     @Override

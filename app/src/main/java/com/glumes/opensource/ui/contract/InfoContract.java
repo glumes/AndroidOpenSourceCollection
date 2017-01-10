@@ -24,7 +24,7 @@ public interface InfoContract {
     }
 
     interface Presenter extends IPresenter<InfoView>{
-        void LoadData(String type, int page, int num) ;
+        void LoadData(String type, int page, int num,boolean showLoding) ;
         boolean isLoading();
     }
 }
