@@ -17,11 +17,10 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+            app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/ToolbarOverlay"
             app:title="@string/app_name"
             app:navigationIcon="@mipmap/ic_drawer_home"
-            app:logo="@mipmap/logo"
             app:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             app:titleTextColor="@android:color/white"
 

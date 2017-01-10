@@ -14,7 +14,7 @@ public abstract class RecyclerViewScrollListener extends RecyclerView.OnScrollLi
     RecyclerView.LayoutManager mLayoutManager ;
     private int mNum ;
 
-    public RecyclerViewScrollListener(RecyclerView.LayoutManager layoutManager,int num) {
+    protected RecyclerViewScrollListener(RecyclerView.LayoutManager layoutManager,int num) {
         mLayoutManager = layoutManager;
         mNum = num ;
     }
