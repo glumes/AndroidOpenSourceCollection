@@ -11,4 +11,12 @@
     <string name="github">github</string>
 
     <string name="load_data_failed">数据加载失败，请检查网络连接...</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="website">www.glumes.com</string>
 </resources>

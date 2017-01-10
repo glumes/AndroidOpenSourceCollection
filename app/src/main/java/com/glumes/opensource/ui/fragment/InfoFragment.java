@@ -75,7 +75,7 @@ public class InfoFragment extends BaseFragment implements InfoContract.InfoView 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_benefit, container, false);
+        View view = inflater.inflate(R.layout.fragment_info, container, false);
         ButterKnife.bind(this, view);
         initView();
         mPresenter.attachView(this);

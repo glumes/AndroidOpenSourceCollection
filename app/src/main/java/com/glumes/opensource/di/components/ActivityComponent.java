@@ -1,7 +1,6 @@
 package com.glumes.opensource.di.components;
 
 import com.glumes.opensource.di.modules.ActivityModule;
-import com.glumes.opensource.di.modules.GankApiModule;
 import com.glumes.opensource.di.scope.ActivityScope;
 import com.glumes.opensource.ui.activity.MainActivity;
 

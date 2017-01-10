@@ -27,7 +27,7 @@ public class FragmentPageAdapter extends FragmentPagerAdapter{
 
 
     private Context mContext ;
-    private String tabTitles[] = new String[]{"Android","iOS","前端","拓展资源"} ;
+    private String tabTitles[] = new String[]{"Android","iOS","前端","拓展资源","ALL"} ;
     private static final int NUM = 10 ;
     private static final int PAGE = 1 ;
 
@@ -40,7 +40,7 @@ public class FragmentPageAdapter extends FragmentPagerAdapter{
         mFragments.add(InfoFragment.newInstance("iOS",NUM,PAGE));
         mFragments.add(InfoFragment.newInstance("前端",NUM,PAGE));
         mFragments.add(InfoFragment.newInstance("拓展资源",NUM,PAGE));
-
+        mFragments.add(InfoFragment.newInstance("all",NUM,PAGE));
     }
 
     @Override
