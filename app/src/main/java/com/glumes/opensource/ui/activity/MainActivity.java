@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity
             return true;
         });
 
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         mPageAdapter = new FragmentPageAdapter(fragmentManager,this);
 
