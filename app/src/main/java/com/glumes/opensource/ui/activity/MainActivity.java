@@ -3,6 +3,7 @@ package com.glumes.opensource.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IntDef;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
@@ -26,6 +27,7 @@ import com.glumes.opensource.net.api.GankApiService;
 import com.glumes.opensource.net.entity.BaseResult;
 import com.glumes.opensource.rx.HttpResultFunc;
 import com.glumes.opensource.ui.adapter.FragmentPageAdapter;
+import com.glumes.opensource.view.AppbarLayoutOffsetChangeListener;
 
 import java.util.List;
 
@@ -60,20 +62,12 @@ public class MainActivity extends AppCompatActivity
     @Inject
     Context mContext ;
 
-    private enum CollaspingToolbarLayoutState{
-        EXPANDED ,
-        COLLAPSED ,
-        INTERNEDIATE
-    }
-    private CollaspingToolbarLayoutState state ;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
-
 
         DaggerActivityComponent.builder()
                 .appComponent(MyApplication.getInstance().getAppComponent())
@@ -94,19 +88,10 @@ public class MainActivity extends AppCompatActivity
             return true;
         });
 
-        mAppbarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+        mAppbarLayout.addOnOffsetChangedListener(new AppbarLayoutOffsetChangeListener() {
             @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (verticalOffset == 0){
-                    if (state != CollaspingToolbarLayoutState.EXPANDED){
-                        mCollapsingToolbarLayout.setTitle("EXPANDED");
-                    }
-                }else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()){
-                    if (state != CollaspingToolbarLayoutState.COLLAPSED){
-                        mCollapsingToolbarLayout.setTitle("Collapsed");
-                        state = CollaspingToolbarLayoutState.COLLAPSED ;
-
-                        mGankApiService.getRandomData("福利",1)
+            public void doActionOnCollapsed() {
+                mGankApiService.getRandomData("福利",1)
                                 .map(new HttpResultFunc<>())
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
@@ -124,17 +109,6 @@ public class MainActivity extends AppCompatActivity
 
                                     }
                                 });
-                    }
-                }else {
-                    if (state != CollaspingToolbarLayoutState.INTERNEDIATE){
-                        if (state == CollaspingToolbarLayoutState.COLLAPSED){
-                            Timber.d("Collapsed");
-                        }
-                        mCollapsingToolbarLayout.setTitle("INTERNEDIATE");
-                        state = CollaspingToolbarLayoutState.INTERNEDIATE ;
-
-                    }
-                }
             }
         });
 
