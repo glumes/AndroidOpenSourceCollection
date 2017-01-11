@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.glumes.opensource.R;
 import com.glumes.opensource.net.entity.BaseResult;
+import com.glumes.opensource.view.RecyclerViewItemClickListener;
+import com.glumes.opensource.view.RecyclerViewItemLongClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,8 @@ import timber.log.Timber;
  * Created by zhaoying on 2017/1/9.
  */
 
-public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener,
+        View.OnLongClickListener {
 
     private static final int ITEM_HEADER = 1;
     private static final int ITEM_BASE = 2;
@@ -33,15 +36,22 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private List<BaseResult> mData;
     private Context mContext;
 
+    private RecyclerViewItemClickListener mItemClickListener ;
+    private RecyclerViewItemLongClickListener mItemLongClickListener ;
 
     public InfoListAdapter(Context context) {
         mContext = context;
         mData = new ArrayList<>();
     }
 
-    public InfoListAdapter(List<BaseResult> results, Context context) {
-        mData = results;
-        mContext = context;
+
+
+    public void setItemLongClickListener(RecyclerViewItemLongClickListener itemLongClickListener) {
+        mItemLongClickListener = itemLongClickListener;
+    }
+
+    public void setItemClickListener(RecyclerViewItemClickListener itemClickListener) {
+        mItemClickListener = itemClickListener;
     }
 
     @Override
@@ -52,29 +62,34 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return new FooterViewHolder(view);
         }
 
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_info, parent, false);
+        view.setOnClickListener(this);
+        view.setOnLongClickListener(this);
         return new ItemViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position + 1 != getItemCount()){
+
             ((ItemViewHolder)holder).mTvItemTitle.setText(mData.get(position).getDesc() == null ? "error" : mData.get
                     (position).getDesc());
-            Timber.d(mData.get(position).getDesc());
+
             ((ItemViewHolder)holder).mTvItemPublisher.setText(mData.get(position).getWho() == null ? "error" : mData
                     .get(position).getWho());
+
             ((ItemViewHolder)holder).mTvItemTime.setText(mData.get(position).getPublishedAt() == null ? "error" :
                     mData.get(position).getPublishedAt());
+
             if (mData.get(position).getImages() != null  ){
-                Timber.d(mData.get(position).getImages().get(0) +  "?imageView2/0/w/200");
                 Glide.with(mContext).load(mData.get(position).getImages().get(0) + "?imageView2/0/w/200").into((
                         (ItemViewHolder)holder).mIvItemImg);
             }else {
                 Glide.with(mContext).load(R.mipmap.image_default).into(((ItemViewHolder)holder)
                         .mIvItemImg);
             }
+
+            holder.itemView.setTag(position);
         }
     }
 
@@ -93,7 +108,23 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return ITEM_BASE ;
     }
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public void onClick(View v) {
+        if (mItemClickListener != null){
+            mItemClickListener.onItemClick(v, (Integer) v.getTag());
+        }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        if (mItemLongClickListener != null){
+            mItemLongClickListener.onItemLongClick(v, (Integer) v.getTag());
+        }
+        return false;
+    }
+
+
+    static class ItemViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.iv_item_img)
         ImageView mIvItemImg;
@@ -129,5 +160,6 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void setData(List<BaseResult> data) {
         mData.addAll(data);
     }
+
 
 }

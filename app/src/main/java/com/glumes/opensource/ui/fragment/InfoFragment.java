@@ -20,6 +20,7 @@ import com.glumes.opensource.di.modules.GankApiModule;
 import com.glumes.opensource.net.entity.BaseResult;
 import com.glumes.opensource.ui.adapter.InfoListAdapter;
 import com.glumes.opensource.ui.contract.InfoContract;
+import com.glumes.opensource.view.RecyclerViewItemClickListener;
 import com.glumes.opensource.view.RecyclerViewScrollListener;
 
 import java.util.List;
@@ -125,6 +126,9 @@ public class InfoFragment extends BaseFragment implements InfoContract.InfoView 
         });
 
         mInfoListAdapter = new InfoListAdapter(this.getActivity());
+
+        mInfoListAdapter.setItemClickListener((view, position) -> Timber.d("position is %d",position ));
+
 
         mInfoList.setAdapter(mInfoListAdapter);
 

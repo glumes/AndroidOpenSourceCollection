@@ -9,8 +9,9 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/action_item1"
-        android:title="@string/menu_item_01"
+        android:icon="@mipmap/setting"
+        android:id="@+id/setting"
+        android:title="@string/setting"
         app:showAsAction="never"/>
 
     <item
