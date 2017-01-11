@@ -9,6 +9,7 @@
     >
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbarLayout"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:fitsSystemWindows="true"
@@ -16,11 +17,13 @@
         >
 
         <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbarLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="@color/colorPrimary"
             app:statusBarScrim="@android:color/transparent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap|enterAlwaysCollapsed"
+            app:titleEnabled="false"
             >
 
             <ImageView
@@ -34,18 +37,22 @@
                 app:layout_collapseParallaxMultiplier="0.7"
                 />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/gradient"
+                android:fitsSystemWindows="true" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="96dp"
                 app:layout_collapseMode="pin"
-                app:layout_scrollFlags="scroll|enterAlways"
                 app:navigationIcon="@mipmap/ic_drawer_home"
                 app:popupTheme="@style/ToolbarOverlay"
-                app:theme="@style/Theme.AppCompat.Light.DarkActionBar"
                 app:titleTextColor="@android:color/white"
                 android:gravity="top"
+                app:title="@string/app_name"
                 app:titleMarginTop="15dp"
                 />
 
@@ -59,17 +66,16 @@
                 android:layout_gravity="bottom"
                 />
 
+
+
         </android.support.design.widget.CollapsingToolbarLayout>
 
 
     </android.support.design.widget.AppBarLayout>
-
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-
 </android.support.design.widget.CoordinatorLayout>

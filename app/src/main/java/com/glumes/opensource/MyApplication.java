@@ -6,6 +6,7 @@ import com.facebook.stetho.Stetho;
 import com.glumes.opensource.di.components.AppComponent;
 import com.glumes.opensource.di.components.DaggerAppComponent;
 import com.glumes.opensource.di.modules.AppModule;
+import com.glumes.opensource.di.modules.GankApiModule;
 import com.glumes.opensource.di.modules.HttpModule;
 
 import io.realm.Realm;
@@ -60,6 +61,7 @@ public class MyApplication extends Application {
         mAppComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .httpModule(new HttpModule())
+                .gankApiModule(new GankApiModule())
                 .build() ;
     }
 

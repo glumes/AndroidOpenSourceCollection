@@ -16,11 +16,9 @@ import com.glumes.opensource.R;
 import com.glumes.opensource.base.BaseFragment;
 import com.glumes.opensource.di.components.DaggerFragmentComponent;
 import com.glumes.opensource.di.modules.FragmentModule;
-import com.glumes.opensource.di.modules.GankApiModule;
 import com.glumes.opensource.net.entity.BaseResult;
 import com.glumes.opensource.ui.adapter.InfoListAdapter;
 import com.glumes.opensource.ui.contract.InfoContract;
-import com.glumes.opensource.view.RecyclerViewItemClickListener;
 import com.glumes.opensource.view.RecyclerViewScrollListener;
 
 import java.util.List;
@@ -61,7 +59,6 @@ public class InfoFragment extends BaseFragment implements InfoContract.InfoView 
         DaggerFragmentComponent.builder()
                 .appComponent(MyApplication.getInstance().getAppComponent())
                 .fragmentModule(new FragmentModule(this))
-                .gankApiModule(new GankApiModule())
                 .build().inject(this);
 
         if (getArguments() != null) {

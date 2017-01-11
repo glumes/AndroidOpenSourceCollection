@@ -19,7 +19,7 @@ import dagger.Component;
 
         modules = {
                 FragmentModule.class,
-                GankApiModule.class
+
         }
 )
 public interface FragmentComponent {

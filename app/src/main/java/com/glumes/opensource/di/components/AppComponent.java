@@ -31,6 +31,7 @@ import retrofit2.Retrofit;
         modules = {
                 AppModule.class,
                 HttpModule.class,
+                GankApiModule.class
         }
 )
 public interface AppComponent {
@@ -44,6 +45,5 @@ public interface AppComponent {
 
     Retrofit retrofit();
 
-
-
+    GankApiService gankApiService();
 }

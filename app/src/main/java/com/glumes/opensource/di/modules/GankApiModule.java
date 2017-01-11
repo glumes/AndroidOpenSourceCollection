@@ -9,6 +9,8 @@ import com.glumes.opensource.rx.HttpResultFunc;
 
 import java.util.List;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
@@ -26,7 +28,7 @@ public class GankApiModule {
     }
 
     @Provides // 方法以 Provide 开头，增加代码的可读性
-    @FragmentScope
+    @Singleton
     GankApiService proviceGankApiService(Retrofit retrofit) {
         return  retrofit.create(GankApiService.class);
     }

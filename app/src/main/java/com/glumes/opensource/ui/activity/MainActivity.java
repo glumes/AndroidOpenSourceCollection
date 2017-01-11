@@ -1,7 +1,10 @@
 package com.glumes.opensource.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
@@ -11,12 +14,28 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.glumes.opensource.MyApplication;
 import com.glumes.opensource.R;
+import com.glumes.opensource.di.components.DaggerActivityComponent;
+import com.glumes.opensource.di.modules.ActivityModule;
+import com.glumes.opensource.net.LoadSubscriber;
+import com.glumes.opensource.net.api.GankApiService;
+import com.glumes.opensource.net.entity.BaseResult;
+import com.glumes.opensource.rx.HttpResultFunc;
 import com.glumes.opensource.ui.adapter.FragmentPageAdapter;
+
+import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -27,7 +46,26 @@ public class MainActivity extends AppCompatActivity
     TabLayout mTabLayout;
     @BindView(R.id.viewpager)
     ViewPager mViewPager;
-    FragmentPageAdapter mPageAdapter ;
+    FragmentPageAdapter mPageAdapter;
+    @BindView(R.id.image)
+    ImageView mImage;
+    @BindView(R.id.collapsingToolbarLayout)
+    CollapsingToolbarLayout mCollapsingToolbarLayout;
+    @BindView(R.id.appbarLayout)
+    AppBarLayout mAppbarLayout;
+
+    @Inject
+    GankApiService mGankApiService ;
+
+    @Inject
+    Context mContext ;
+
+    private enum CollaspingToolbarLayoutState{
+        EXPANDED ,
+        COLLAPSED ,
+        INTERNEDIATE
+    }
+    private CollaspingToolbarLayoutState state ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +74,18 @@ public class MainActivity extends AppCompatActivity
 
         ButterKnife.bind(this);
 
+
+        DaggerActivityComponent.builder()
+                .appComponent(MyApplication.getInstance().getAppComponent())
+                .activityModule(new ActivityModule(this))
+                .build().inject(this);
+
         mToolbar.inflateMenu(R.menu.base_toolbar_menu);
         mToolbar.setOnMenuItemClickListener(item -> {
-            switch (item.getItemId()){
+            switch (item.getItemId()) {
 
                 case R.id.setting:
-                    startActivity(new Intent(MainActivity.this,SettingActivity.class));
+                    startActivity(new Intent(MainActivity.this, SettingActivity.class));
                     break;
                 case R.id.action_item2:
 
@@ -50,16 +94,58 @@ public class MainActivity extends AppCompatActivity
             return true;
         });
 
+        mAppbarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (verticalOffset == 0){
+                    if (state != CollaspingToolbarLayoutState.EXPANDED){
+                        mCollapsingToolbarLayout.setTitle("EXPANDED");
+                    }
+                }else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()){
+                    if (state != CollaspingToolbarLayoutState.COLLAPSED){
+                        mCollapsingToolbarLayout.setTitle("Collapsed");
+                        state = CollaspingToolbarLayoutState.COLLAPSED ;
+
+                        mGankApiService.getRandomData("福利",1)
+                                .map(new HttpResultFunc<>())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new LoadSubscriber<List<BaseResult>>() {
+                                    @Override
+                                    protected void onSuccess(List<BaseResult> baseResults) {
+                                        Timber.d(baseResults.get(0).toString());
+                                        Glide.with(mContext)
+                                                .load(baseResults.get(0).getUrl())
+                                                .into(mImage);
+                                    }
+
+                                    @Override
+                                    protected void onFailed(Throwable e) {
+
+                                    }
+                                });
+                    }
+                }else {
+                    if (state != CollaspingToolbarLayoutState.INTERNEDIATE){
+                        if (state == CollaspingToolbarLayoutState.COLLAPSED){
+                            Timber.d("Collapsed");
+                        }
+                        mCollapsingToolbarLayout.setTitle("INTERNEDIATE");
+                        state = CollaspingToolbarLayoutState.INTERNEDIATE ;
+
+                    }
+                }
+            }
+        });
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        mPageAdapter = new FragmentPageAdapter(fragmentManager,this);
+        mPageAdapter = new FragmentPageAdapter(fragmentManager, this);
 
         mViewPager.setAdapter(mPageAdapter);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         mViewPager.setPageMarginDrawable(R.drawable.ic_menu_gallery);
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -76,7 +162,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -90,7 +175,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
-            startActivity(new Intent(MainActivity.this,SettingActivity.class));
+            startActivity(new Intent(MainActivity.this, SettingActivity.class));
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -101,4 +186,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }
