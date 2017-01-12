@@ -12,8 +12,7 @@
     <style name="ToolbarOverlay" parent="@style/ThemeOverlay.AppCompat.Light">
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textSize">18sp</item>
-        <!--更改 toolbar 右侧三个点的颜色-->
-        <item name="android:textColorSecondary">@android:color/white</item>
+
     </style>
 
     <style name="TransparentTheme" parent="AppTheme">
@@ -22,6 +21,8 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowDrawsSystemBarBackgrounds">false</item>
 
+        <!--更改 toolbar 右侧三个点的颜色-->
+        <item name="android:textColorSecondary">@android:color/white</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
