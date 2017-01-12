@@ -3,21 +3,28 @@ package com.glumes.opensource.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.IntDef;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.github.florent37.glidepalette.BitmapPalette;
+import com.github.florent37.glidepalette.GlidePalette;
 import com.glumes.opensource.MyApplication;
 import com.glumes.opensource.R;
 import com.glumes.opensource.di.components.DaggerActivityComponent;
@@ -35,6 +42,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -57,10 +65,14 @@ public class MainActivity extends AppCompatActivity
     AppBarLayout mAppbarLayout;
 
     @Inject
-    GankApiService mGankApiService ;
+    GankApiService mGankApiService;
 
     @Inject
-    Context mContext ;
+    Context mContext;
+
+    Subscription mSubscription;
+    @BindView(R.id.floatingActionButton)
+    FloatingActionButton mFloatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,27 +100,80 @@ public class MainActivity extends AppCompatActivity
             return true;
         });
 
+        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mSubscription = mGankApiService.getRandomData("福利", 1)
+                        .map(new HttpResultFunc<>())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new LoadSubscriber<List<BaseResult>>() {
+                            @Override
+                            protected void onSuccess(List<BaseResult> baseResults) {
+                                Timber.d(baseResults.get(0).toString());
+                                Glide.with(mContext)
+                                        .load(baseResults.get(0).getUrl())
+                                        .listener(GlidePalette.with(baseResults.get(0).getUrl())
+                                                .intoCallBack(new BitmapPalette.CallBack() {
+                                                    @Override
+                                                    public void onPaletteLoaded(@Nullable Palette palette) {
+                                                        if (palette != null) {
+                                                            mCollapsingToolbarLayout.setContentScrimColor(palette
+                                                                    .getDarkVibrantColor(ContextCompat.getColor(mContext,
+                                                                            R.color.colorPrimary)));
+
+                                                            mFloatingActionButton.setBackgroundColor(palette
+                                                                    .getDarkVibrantColor(ContextCompat.getColor(mContext,
+                                                                            R.color.colorPrimary)));
+                                                        }
+                                                    }
+                                                })
+                                        )
+                                        .into(mImage);
+                            }
+
+                            @Override
+                            protected void onFailed(Throwable e) {
+                                Timber.e("load image failed");
+                            }
+                        });
+            }
+        });
+
         mAppbarLayout.addOnOffsetChangedListener(new AppbarLayoutOffsetChangeListener() {
             @Override
             public void doActionOnCollapsed() {
-                mGankApiService.getRandomData("福利",1)
-                                .map(new HttpResultFunc<>())
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new LoadSubscriber<List<BaseResult>>() {
-                                    @Override
-                                    protected void onSuccess(List<BaseResult> baseResults) {
-                                        Timber.d(baseResults.get(0).toString());
-                                        Glide.with(mContext)
-                                                .load(baseResults.get(0).getUrl())
-                                                .into(mImage);
-                                    }
-
-                                    @Override
-                                    protected void onFailed(Throwable e) {
-
-                                    }
-                                });
+//                mSubscription = mGankApiService.getRandomData("福利", 1)
+//                        .map(new HttpResultFunc<>())
+//                        .subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe(new LoadSubscriber<List<BaseResult>>() {
+//                            @Override
+//                            protected void onSuccess(List<BaseResult> baseResults) {
+//                                Timber.d(baseResults.get(0).toString());
+//                                Glide.with(mContext)
+//                                        .load(baseResults.get(0).getUrl())
+//                                        .listener(GlidePalette.with(baseResults.get(0).getUrl())
+//                                                .intoCallBack(new BitmapPalette.CallBack() {
+//                                                    @Override
+//                                                    public void onPaletteLoaded(@Nullable Palette palette) {
+//                                                        if (palette != null) {
+//                                                            mCollapsingToolbarLayout.setContentScrimColor(palette
+//                                                                    .getVibrantColor(ContextCompat.getColor(mContext, R
+//                                                                            .color.colorPrimary)));
+//                                                        }
+//                                                    }
+//                                                })
+//                                        )
+//                                        .into(mImage);
+//                            }
+//
+//                            @Override
+//                            protected void onFailed(Throwable e) {
+//                                Timber.e("load image failed");
+//                            }
+//                        });
             }
         });
 
@@ -162,4 +227,11 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (!mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
+    }
 }
