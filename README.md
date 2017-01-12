@@ -1,7 +1,7 @@
 # Android 开源框架使用合集
 
 
-![opensource-introduce-1](http://7xqe3m.com1.z0.glb.clouddn.com/blog-intro-1.jpg)
+![opensource-introduce-1](http://7xqe3m.com1.z0.glb.clouddn.com/blog-intro-1-small.jpg)
 
 
 ## 介绍
