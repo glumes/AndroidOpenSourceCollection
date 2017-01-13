@@ -35,6 +35,7 @@ import com.glumes.opensource.net.entity.BaseResult;
 import com.glumes.opensource.rx.HttpResultFunc;
 import com.glumes.opensource.ui.adapter.FragmentPageAdapter;
 import com.glumes.opensource.view.AppbarLayoutOffsetChangeListener;
+import com.glumes.opensource.view.ZoomOutPagerTransformer;
 
 import java.util.List;
 
@@ -49,6 +50,7 @@ import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -144,36 +146,6 @@ public class MainActivity extends AppCompatActivity
         mAppbarLayout.addOnOffsetChangedListener(new AppbarLayoutOffsetChangeListener() {
             @Override
             public void doActionOnCollapsed() {
-//                mSubscription = mGankApiService.getRandomData("福利", 1)
-//                        .map(new HttpResultFunc<>())
-//                        .subscribeOn(Schedulers.io())
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe(new LoadSubscriber<List<BaseResult>>() {
-//                            @Override
-//                            protected void onSuccess(List<BaseResult> baseResults) {
-//                                Timber.d(baseResults.get(0).toString());
-//                                Glide.with(mContext)
-//                                        .load(baseResults.get(0).getUrl())
-//                                        .listener(GlidePalette.with(baseResults.get(0).getUrl())
-//                                                .intoCallBack(new BitmapPalette.CallBack() {
-//                                                    @Override
-//                                                    public void onPaletteLoaded(@Nullable Palette palette) {
-//                                                        if (palette != null) {
-//                                                            mCollapsingToolbarLayout.setContentScrimColor(palette
-//                                                                    .getVibrantColor(ContextCompat.getColor(mContext, R
-//                                                                            .color.colorPrimary)));
-//                                                        }
-//                                                    }
-//                                                })
-//                                        )
-//                                        .into(mImage);
-//                            }
-//
-//                            @Override
-//                            protected void onFailed(Throwable e) {
-//                                Timber.e("load image failed");
-//                            }
-//                        });
             }
         });
 
@@ -181,6 +153,7 @@ public class MainActivity extends AppCompatActivity
         mPageAdapter = new FragmentPageAdapter(fragmentManager, this);
 
         mViewPager.setAdapter(mPageAdapter);
+        mViewPager.setPageTransformer(true,new ZoomOutPagerTransformer());
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         mViewPager.setPageMarginDrawable(R.drawable.ic_menu_gallery);
         mTabLayout.setupWithViewPager(mViewPager);
