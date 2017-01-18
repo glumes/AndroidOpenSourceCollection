@@ -15,6 +15,8 @@ public class ZoomOutPagerTransformer implements ViewPager.PageTransformer {
     /**
      * 来自谷歌官方示例的动画效果
      * https://developer.android.com/training/animation/screen-slide.html#pagetransformer
+     * 想要在 3.0 以下使用属性动画，使用 nineoldandroid 开源库，
+     * 并且，修改 ViewPager 中的 版本 IF 判断。
      * @param page
      * @param position
      */
