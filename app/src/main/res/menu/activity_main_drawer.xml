@@ -5,11 +5,11 @@
         <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import"/>
+            android:title="夜间模式"/>
         <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery"/>
+            android:title="插件换肤"/>
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
@@ -20,7 +20,7 @@
             android:title="@string/setting"/>
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Communicate" >
         <menu>
             <item
                 android:id="@+id/nav_share"
