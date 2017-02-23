@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity
                 ImageView imageView = new ImageView(mContext);
                 imageView.setImageDrawable(drawables[mRandom.nextInt(drawables.length)]);
                 mCoordinatorLayout.addView(imageView,mLayoutParams);
-                ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(imageView,"alpha",0.0f,1.0f);
+                ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(imageView,"alpha",0.2f,1.0f);
                 alphaAnimator.setDuration(DURATION);
                 ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(imageView,"scaleX",0.5f,1.0f);
                 scaleXAnimator.setDuration(DURATION);
@@ -178,7 +178,6 @@ public class MainActivity extends AppCompatActivity
                         with(scaleXAnimator).
                         with(scaleYAnimator) ;
                 animatorSet.start();
-
             }
         });
 
@@ -245,9 +244,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private ValueAnimator getBezierAnimator(){
-        return ValueAnimator.ofObject(new BezierEvaluator(mStartPoint,mEndPoint),
-                getPointF(DOWN_POINT),
-                getPointF(UP_POINT)) ;
+        return ValueAnimator.ofObject(new BezierEvaluator(getPointF(DOWN_POINT),getPointF(UP_POINT)),
+                mStartPoint,
+                new PointF(mRandom.nextInt(mLayoutWidth), 0)) ;
     }
 
 
@@ -255,9 +254,7 @@ public class MainActivity extends AppCompatActivity
     public void onWindowFocusChanged(boolean hasFocus) {
         mLayoutWidth = mCoordinatorLayout.getWidth() ;
         mLayoutHeight = mCoordinatorLayout.getHeight() ;
-        Timber.d("width is %d , height is %d",mLayoutWidth ,mLayoutHeight );
         mStartPoint = new PointF( (mLayoutWidth - mFlowerWidth) / 2 ,mLayoutHeight - mFlowerHeight) ;
-        mEndPoint = new PointF(mRandom.nextInt(mLayoutWidth) , 0) ;
     }
 
     @Override

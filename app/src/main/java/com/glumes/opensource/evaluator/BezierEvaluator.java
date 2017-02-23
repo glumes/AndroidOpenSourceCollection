@@ -35,7 +35,6 @@ public class BezierEvaluator implements TypeEvaluator<PointF> {
         PointF point = new PointF();
         float temp = 1 - t;
         Timber.d("fraction t is %f",t);
-        Timber.d("start point width is %f,end point width is %f",point0.x,point3.x);
 
         point.x = point0.x * temp * temp * temp
                 + 3 * point1.x * t * temp * temp
