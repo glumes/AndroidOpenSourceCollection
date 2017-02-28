@@ -18,6 +18,7 @@
 *	基于 Dagger2 的注入框架
 *	RxJava + Retrofit + OkHttp 的网络请求
 *   Glide 图片加载
+*   贝塞尔曲线动画效果
 
 ......
 

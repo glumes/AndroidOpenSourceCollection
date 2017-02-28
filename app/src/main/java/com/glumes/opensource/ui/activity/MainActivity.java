@@ -18,10 +18,15 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.LayoutInflaterCompat;
+import android.support.v4.view.LayoutInflaterFactory;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +50,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Subscription;
+import timber.log.Timber;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -92,55 +98,32 @@ public class MainActivity extends BaseActivity
     private int mLayoutHeight ;
 
     private PointF mStartPoint ;
-    private PointF mEndPoint ;
-
-    private int mWidth ;
-    private int mHeight ;
 
     private static final long DURATION = 2000 ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        LayoutInflaterCompat.setFactory(LayoutInflater.from(this), new LayoutInflaterFactory() {
+            @Override
+            public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+
+                AppCompatDelegate delegate = getDelegate() ;
+
+                View view = delegate.createView(parent,name,context,attrs);
+
+                Timber.d("view name is %s",name);
+                return  view ;
+
+            }
+        });
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         ButterKnife.bind(this);
 
         initData();
-
-
-//        mFloatingActionButton.setOnClickListener(v -> mSubscription = mGankApiService.getRandomData("福利", 1)
-//                .map(new HttpResultFunc<>())
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new LoadSubscriber<List<BaseResult>>() {
-//                    @Override
-//                    protected void onSuccess(List<BaseResult> baseResults) {
-//                        Timber.d(baseResults.get(0).toString());
-//                        Glide.with(mContext)
-//                                .load(baseResults.get(0).getUrl())
-//                                        .listener(GlidePalette.with(baseResults.get(0).getUrl())
-//                                                .intoCallBack(palette -> {
-//                                                    if (palette != null) {
-////                                                            mCollapsingToolbarLayout.setContentScrimColor(palette
-////                                                                    .getDarkVibrantColor(ContextCompat.getColor(mContext,
-////                                                                            R.color.colorPrimary)));
-//
-////                                                            mFloatingActionButton.setBackgroundColor(palette
-////                                                                    .getDarkVibrantColor(ContextCompat.getColor(mContext,
-////                                                                            R.color.colorPrimary)));
-//                                                    }
-//                                                })
-//                                        )
-//
-//                                .into(mImage);
-//                    }
-//
-//                    @Override
-//                    protected void onFailed(Throwable e) {
-//                        Timber.e("load image failed");
-//                    }
-//                }));
 
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,7 +186,10 @@ public class MainActivity extends BaseActivity
 
     private void initData() {
 
-
+        DaggerActivityComponent.builder()
+                .appComponent(MyApplication.getInstance().getAppComponent())
+                .activityModule(new ActivityModule(this))
+                .build().inject(this);
 
         mToolbar.inflateMenu(R.menu.base_toolbar_menu);
         mToolbar.setOnMenuItemClickListener(item -> {
@@ -229,14 +215,10 @@ public class MainActivity extends BaseActivity
 
         mFlowerWidth = drawables[0].getIntrinsicWidth();
         mFlowerHeight = drawables[0].getIntrinsicHeight();
-
         mLayoutParams = new CoordinatorLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         mLayoutParams.gravity = Gravity.CENTER | Gravity.BOTTOM;
-
-        mWidth = getResources().getDisplayMetrics().widthPixels ;
-        mHeight = getResources().getDisplayMetrics().heightPixels ;
     }
 
     private ValueAnimator getBezierAnimator(){
@@ -314,11 +296,5 @@ public class MainActivity extends BaseActivity
         return pointF ;
     }
 
-    @Override
-    protected void initComponentInject() {
-        DaggerActivityComponent.builder()
-                .appComponent(MyApplication.getInstance().getAppComponent())
-                .activityModule(new ActivityModule(this))
-                .build().inject(this);
-    }
+
 }
