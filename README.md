@@ -6,7 +6,7 @@
 
 ## 介绍
 
-基于 Android 常用开源框架打造的客户端，感谢 [干货集中营](http://gank.io/) 提供的 API 接口。
+基于 MVP、RxJava、Retrofit、Dagger2 等 Android 常用开源框架打造的客户端，感谢 [干货集中营](http://gank.io/) 提供的 API 接口。
 
 
 ## 特点
@@ -14,7 +14,7 @@
 开源库的搭配：
 
 *	MVP 代码架构
-*	Material Design 风格设计和 控件 使用
+*	Material Design 风格设计和控件使用
 *	基于 Dagger2 的注入框架
 *	RxJava + Retrofit + OkHttp 的网络请求
 *   Glide 图片加载
