@@ -19,7 +19,7 @@ import com.glumes.opensource.di.modules.FragmentModule;
 import com.glumes.opensource.net.entity.BaseResult;
 import com.glumes.opensource.ui.adapter.InfoListAdapter;
 import com.glumes.opensource.ui.contract.InfoContract;
-import com.glumes.opensource.view.RecyclerViewScrollListener;
+import com.glumes.opensource.viewlistener.RecyclerViewScrollListener;
 
 import java.util.List;
 

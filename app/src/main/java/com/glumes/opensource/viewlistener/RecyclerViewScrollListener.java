@@ -1,4 +1,4 @@
-package com.glumes.opensource.view;
+package com.glumes.opensource.viewlistener;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;

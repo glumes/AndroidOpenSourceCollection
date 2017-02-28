@@ -12,15 +12,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.glumes.opensource.R;
 import com.glumes.opensource.net.entity.BaseResult;
-import com.glumes.opensource.view.RecyclerViewItemClickListener;
-import com.glumes.opensource.view.RecyclerViewItemLongClickListener;
+import com.glumes.opensource.viewlistener.RecyclerViewItemClickListener;
+import com.glumes.opensource.viewlistener.RecyclerViewItemLongClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 /**
  * Created by zhaoying on 2017/1/9.

@@ -1,4 +1,4 @@
-package com.glumes.opensource.view;
+package com.glumes.opensource.viewlistener;
 
 import android.support.v4.view.ViewPager;
 import android.view.View;

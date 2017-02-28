@@ -29,6 +29,5 @@ public abstract class BaseActivity extends AppCompatActivity {
         initComponentInject();
     }
 
-
     protected abstract void initComponentInject() ;
 }

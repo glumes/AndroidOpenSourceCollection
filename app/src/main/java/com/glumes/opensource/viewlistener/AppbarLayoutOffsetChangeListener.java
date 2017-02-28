@@ -1,4 +1,4 @@
-package com.glumes.opensource.view;
+package com.glumes.opensource.viewlistener;
 
 import android.support.annotation.IntDef;
 import android.support.design.widget.AppBarLayout;
