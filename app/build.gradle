@@ -65,6 +65,8 @@ dependencies {
     provided 'org.glassfish:javax.annotation:10.0-b28'
 
 
+//    compile 'com.jakewharton:butterknife:8.5.1'
+//    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
 }
 

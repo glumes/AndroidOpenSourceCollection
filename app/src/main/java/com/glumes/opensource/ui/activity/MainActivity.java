@@ -104,21 +104,21 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        LayoutInflaterCompat.setFactory(LayoutInflater.from(this), new LayoutInflaterFactory() {
-            @Override
-            public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-
-                AppCompatDelegate delegate = getDelegate() ;
-
-                View view = delegate.createView(parent,name,context,attrs);
-
-                Timber.d("view name is %s",name);
-                return  view ;
-
-            }
-        });
-
         super.onCreate(savedInstanceState);
+//        LayoutInflaterCompat.setFactory(LayoutInflater.from(this), new LayoutInflaterFactory() {
+//            @Override
+//            public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+//
+//                AppCompatDelegate delegate = getDelegate() ;
+//
+//                View view = delegate.createView(parent,name,context,attrs);
+//
+//                Timber.d("view name is %s",name);
+//                return  view ;
+//
+//            }
+//        });
+
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
@@ -275,9 +275,9 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (!mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
+//        if (!mSubscription.isUnsubscribed()) {
+//            mSubscription.unsubscribe();
+//        }
     }
 
     /**

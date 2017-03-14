@@ -27,7 +27,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
 
-        super.onCreate(savedInstanceState, persistentState);
 
         LayoutInflaterCompat.setFactory(LayoutInflater.from(this), new LayoutInflaterFactory() {
             @Override
@@ -43,6 +42,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         });
 
+        super.onCreate(savedInstanceState, persistentState);
         Timber.d("start");
     }
 
