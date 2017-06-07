@@ -32,7 +32,7 @@ public abstract class BasePresenter<T extends IView, M extends IModel>
 
     @Override
     public void attachView(T t) {
-//        mView = t;
+        mView = t;
         mSubscription = new CompositeSubscription();
     }
 
